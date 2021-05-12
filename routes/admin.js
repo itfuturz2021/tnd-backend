@@ -2760,4 +2760,30 @@ router.post("/FindAndSendNotification", async function(req,res,next){
     }
 });
 
+// -----------------make api by sohil -------12-05-2021---
+router.post('/getAllNotificationCat', async function(req, res, next){
+    const{ userId } = req.body;
+    try {
+        let existNotification = await directoryData.aggregate([
+            {
+                $match: {
+                    _id: mongoose.Types.ObjectId(userId)
+                }
+            },
+            {
+                $project: {
+                    favoraitenewsnotification: 1
+                }
+            }
+        ]);
+        if(existNotification.length == 1){
+            res.status(200).json({ IsSuccess : true, Data: existNotification, Message : "Data Found"});
+        }else{
+            res.status(200).json({ IsSuccess : true, Data: [], Message : "Data Not Found"});
+        }
+    } catch (error) {
+        res.status(500).json({ IsSuccess: false, Message: error.message });
+    }
+})
+
 module.exports = router;
