@@ -2486,7 +2486,7 @@ router.post("/deletemany", async function(req, res, next) {
     }
 });
 
-router.post("/addEpaper", uploadPdf.fields([ { name : " "}, { name : "image"} ]), async function(req,res,next){
+router.post("/addEpaper", uploadPdf.fields([ { name : "pdfUrl"}, { name : "image"} ]), async function(req,res,next){
     const { title } = req.body;
     const fileinfo = req.files;
     try {
