@@ -1218,21 +1218,21 @@ router.post("/getOfferbySubcategory", async function(req,res,next){
                     ]
                 }
             },
-            // {
-            //     $lookup:
-            //             {
-            //                 from: "inquiries",
-            //                 localField: "userId",
-            //                 foreignField: "toUser",
-            //                 as: "inquireData"
-            //             }
-            // },
+            {
+                $lookup:
+                        {
+                            from: "userslists",
+                            localField: "userId",
+                            foreignField: "_id",
+                            as: "UserId"
+                        }
+            },
         ])
         if(findOffer.length < 0){
             res.status(200).json({ IsSuccess : true, Data : [], Message : "No data found"});
         }
         else{
-            res.status(200).json({ IsSuccess : true, Data : [findOffer], Message : "Offer found"});
+            res.status(200).json({ IsSuccess : true, count : findOffer.length, Data : findOffer, Message : "Offer found"});
         }
     } catch (error) {
         res.status(500)
