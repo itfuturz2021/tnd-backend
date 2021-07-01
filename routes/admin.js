@@ -1206,6 +1206,44 @@ router.post("/offer", uploadOfferbanner.single("bannerImage"), async function(re
     }
 });
 
+router.post("/getOfferbySubcategory", async function(req,res,next){
+    const { Mastercategory,subcategory} = req.body;
+    try {
+        let findOffer = await offerSchema.aggregate([
+            {
+                $match : {
+                    $and :[
+                        {Mastercategory : mongoose.Types.ObjectId(Mastercategory)},
+                        {subcategory : mongoose.Types.ObjectId(subcategory)}
+                    ]
+                }
+            },
+            // {
+            //     $lookup:
+            //             {
+            //                 from: "inquiries",
+            //                 localField: "userId",
+            //                 foreignField: "toUser",
+            //                 as: "inquireData"
+            //             }
+            // },
+        ])
+        if(findOffer.length < 0){
+            res.status(200).json({ IsSuccess : true, Data : [], Message : "No data found"});
+        }
+        else{
+            res.status(200).json({ IsSuccess : true, Data : [findOffer], Message : "Offer found"});
+        }
+    } catch (error) {
+        res.status(500)
+            .json({
+                IsSuccess: false,
+                Data: 0,
+                Message: error.message
+            });
+    }
+});
+
 router.post("/getOfferOfBusiness", async function(req, res, next) {
     const { businessCategory_id } = req.body;
     try {
